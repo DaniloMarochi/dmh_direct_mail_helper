@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,7 @@ Route::get('/', function () {
 
 Route::view("/home", "home")->name("home");
 
-// Route::prefix("imports")->group(function(){
-
-// });
+Route::prefix('students')->group(function () {
+    Route::get('{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
+    Route::patch('{id}', [StudentController::class, 'destroy'])->name('students.destroy');
+});
