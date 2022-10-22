@@ -18,7 +18,7 @@ class StudentSeeder extends Seeder
         $courses = Course::all();
 
         foreach ($courses as $course) {
-            Student::factory()->count(40)->create(["course_id"=>$course->id]);
+            Student::factory()->count(15)->create(["course_id"=>$course->id]);
         }
     }
 }

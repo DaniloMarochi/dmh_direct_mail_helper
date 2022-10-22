@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\StudentImport;
 use App\Models\Student;
 use Illuminate\Console\View\Components\Alert;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller {
     /**
@@ -13,7 +15,7 @@ class StudentController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        //
+
     }
 
     /**
@@ -22,7 +24,7 @@ class StudentController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //
+        return view('students.create');
     }
 
     /**
@@ -32,7 +34,9 @@ class StudentController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        //
+        Excel::import(new StudentImport(), $request->file(key: 'import_file'));
+
+        return redirect()->route('home')->with('success', 'Arquivo importado com sucesso');
     }
 
     /**
@@ -73,7 +77,7 @@ class StudentController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        $student = Student::findOrFail($id)->first();
+        $student = Student::findOrFail($id);
 
         $student->update([
             "deleted_at"=> now("America/Sao_Paulo")

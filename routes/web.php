@@ -21,6 +21,9 @@ Route::get('/', function () {
 Route::view("/home", "home")->name("home");
 
 Route::prefix('students')->group(function () {
+    Route::get('/create', [StudentController::class, 'create'])->name('students.create');
+    Route::post('/store', [StudentController::class, 'store'])->name('students.store');
     Route::get('{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
     Route::patch('{id}', [StudentController::class, 'destroy'])->name('students.destroy');
+
 });

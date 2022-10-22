@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Course;
 use App\Models\Student;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -28,7 +29,7 @@ final class studentTable extends PowerGridComponent
             Exportable::make('export')
                 ->striped()
                 ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
-            Header::make()->showSearchInput(),
+            Header::make()->showSearchInput()->showToggleColumns(),
             Footer::make()
                 ->showPerPage()
                 ->showRecordCount(),
@@ -50,7 +51,8 @@ final class studentTable extends PowerGridComponent
     */
     public function datasource(): Builder
     {
-        return Student::query();
+        return Student::query()->join('courses', 'students.course_id', '=', 'courses.id')
+                               ->select('students.*', 'courses.name as course');
     }
 
     /*
@@ -96,12 +98,7 @@ final class studentTable extends PowerGridComponent
             ->addColumn('email')
             ->addColumn('frequence')
             ->addColumn('occurrence')
-            ->addColumn('course_id')
-            ->addColumn('created_at_formatted', fn (Student $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
-            ->addColumn('updated_at_formatted', fn (Student $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'))
-            ->addColumn('deleted_at_formatted', fn (Student $model) => Carbon::parse($model->deleted_at)->format('d/m/Y H:i:s'))
-            ->addColumn('created_at_formatted', fn (Student $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
-            ->addColumn('updated_at_formatted', fn (Student $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'));
+            ->addColumn('course_formatted', fn(Student $student)=>$student->course);
     }
 
     /*
@@ -122,6 +119,7 @@ final class studentTable extends PowerGridComponent
     {
         return [
             Column::make('ID', 'id')
+                ->sortable()
                 ->makeInputRange(),
 
 
@@ -142,33 +140,9 @@ final class studentTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('COURSE ID', 'course_id')
-                ->makeInputRange(),
+            Column::make('COURSE', 'course_formatted', 'courses.name')
+                ->sortable()->makeInputMultiSelect(Course::all(), 'name', 'course_id')
 
-            Column::make('CREATED AT', 'created_at_formatted', 'created_at')
-                ->searchable()
-                ->sortable()
-                ->makeInputDatePicker(),
-
-            Column::make('UPDATED AT', 'updated_at_formatted', 'updated_at')
-                ->searchable()
-                ->sortable()
-                ->makeInputDatePicker(),
-
-            Column::make('DELETED AT', 'deleted_at_formatted', 'deleted_at')
-                ->searchable()
-                ->sortable()
-                ->makeInputDatePicker(),
-
-            Column::make('CREATED AT', 'created_at_formatted', 'created_at')
-                ->searchable()
-                ->sortable()
-                ->makeInputDatePicker(),
-
-            Column::make('UPDATED AT', 'updated_at_formatted', 'updated_at')
-                ->searchable()
-                ->sortable()
-                ->makeInputDatePicker(),
 
         ]
 ;
