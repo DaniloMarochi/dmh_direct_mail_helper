@@ -171,6 +171,12 @@ final class studentTable extends PowerGridComponent
         ->route('students.edit', ['id' => 'id'])
         ->target('_self'),
 
+        Button::make('sendEmail', '<i class="fa-regular fa-envelope"></i>')
+        ->class('btn btn-outline-warning cursor-pointer m-1 rounded text-sm')
+        ->tooltip('Enviar email')
+        ->route('students.send.email', ['id' => 'id'])
+        ->target('_self'),
+
         Button::make('destroy', '<i class="fas fa-trash"></i>')
         ->class('btn btn-outline-danger cursor-pointer m-1 rounded text-sm')
         ->tooltip('Delete Student')

@@ -7,6 +7,8 @@ use App\Models\Student;
 use Illuminate\Console\View\Components\Alert;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Mail\newLaravelTips;
+use Illuminate\Support\Facades\Mail;
 
 class StudentController extends Controller {
     /**
@@ -84,5 +86,13 @@ class StudentController extends Controller {
         ]);
 
         return back()->with('success', 'Usuário deletado!');
+    }
+
+    public function sendEmail($id){
+
+        $student = Student::findOrFail($id);
+
+        Mail::send(new \App\Mail\newLaravelTips($student));
+        return new newLaravelTips($student);
     }
 }
