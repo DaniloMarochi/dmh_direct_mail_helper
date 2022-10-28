@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Student;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use PhpParser\Node\Expr\Cast\Array_;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
@@ -173,8 +174,6 @@ final class studentTable extends PowerGridComponent
     public function actions(): array
     {
 
-        //$studentFrequence = Student::get('frequence')->toArray();
-
         return [
             Button::make('sendEmail', '<i class="fa-regular fa-envelope"></i>')
                 ->class('btn btn-outline-warning cursor-pointer m-1 rounded text-sm')
@@ -194,6 +193,15 @@ final class studentTable extends PowerGridComponent
                 ->route('students.destroy', ['id' => 'id'])
                 ->method('patch')
                 ->target('_self')
+        ];
+    }
+
+    public function actionRules(): array
+    {
+        return [
+            Rule::button('sendEmail')
+                ->when(fn ($student) => $student->frequence <= 75)
+                ->hide()
         ];
     }
 }
