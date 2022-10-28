@@ -45,14 +45,22 @@ final class studentTable extends PowerGridComponent
     */
 
     /**
-    * PowerGrid datasource.
-    *
-    * @return Builder<\App\Models\Student>
-    */
+     * PowerGrid datasource.
+     *
+     * @return Builder<\App\Models\Student>
+     */
     public function datasource(): Builder
     {
-        return Student::query()->join('courses', 'students.course_id', '=', 'courses.id')
-                               ->select('students.*', 'courses.name as course');
+        return Student::join('courses', 'students.course_id', '=', 'courses.id')
+            ->select('students.*', 'courses.sigla as course');
+
+        //condicional da tela dos meses (nesse caso no mês de setembro)
+        //->where('students.created_at', '>', date('2022-09-01'))
+        //->where('students.created_at', '<', date('2022-10-01'));
+
+        //condicional da tela de import
+        //->where('students.created_at', '>', now('America/Sao_Paulo')->startOfDay());
+        //->where('students.frequence', '<=', '75');
     }
 
     /*
@@ -90,7 +98,7 @@ final class studentTable extends PowerGridComponent
             ->addColumn('id')
             ->addColumn('name')
 
-           /** Example of custom column using a closure **/
+            /** Example of custom column using a closure **/
             ->addColumn('name_lower', function (Student $model) {
                 return strtolower(e($model->name));
             })
@@ -98,7 +106,7 @@ final class studentTable extends PowerGridComponent
             ->addColumn('email')
             ->addColumn('frequence')
             ->addColumn('occurrence')
-            ->addColumn('course_formatted', fn(Student $student)=>$student->course);
+            ->addColumn('course_formatted', fn (Student $student) => $student->course);
     }
 
     /*
@@ -110,7 +118,7 @@ final class studentTable extends PowerGridComponent
     |
     */
 
-     /**
+    /**
      * PowerGrid Columns.
      *
      * @return array<int, Column>
@@ -123,29 +131,28 @@ final class studentTable extends PowerGridComponent
                 ->makeInputRange(),
 
 
-            Column::make('NAME', 'name')
+            Column::make('Nome', 'name')
                 ->sortable()
                 ->searchable()
                 ->makeInputText(),
 
-            Column::make('EMAIL', 'email')
+            Column::make('E-mail', 'email')
                 ->sortable()
                 ->searchable()
                 ->makeInputText(),
 
-            Column::make('FREQUENCE', 'frequence')
+            Column::make('Frequência', 'frequence')
                 ->makeInputRange(),
 
-            Column::make('OCCURRENCE', 'occurrence')
+            Column::make('Ocorrência', 'occurrence')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('COURSE', 'course_formatted', 'courses.name')
+            Column::make('Curso', 'course_formatted', 'courses.name')
                 ->sortable()->makeInputMultiSelect(Course::all(), 'name', 'course_id')
 
 
-        ]
-;
+        ];
     }
 
     /*
@@ -156,34 +163,37 @@ final class studentTable extends PowerGridComponent
     |
     */
 
-     /**
+    /**
      * PowerGrid Student Action Buttons.
      *
      * @return array<int, Button>
      */
 
 
-    public function actions(): array {
-       return [
-        Button::make('edit', '<i class="fas fa-edit"></i>')
-        ->class('btn btn-outline-primary cursor-pointer m-1 rounded text-sm')
-        ->tooltip('Edit Student')
-        ->route('students.edit', ['id' => 'id'])
-        ->target('_self'),
+    public function actions(): array
+    {
 
-        Button::make('sendEmail', '<i class="fa-regular fa-envelope"></i>')
-        ->class('btn btn-outline-warning cursor-pointer m-1 rounded text-sm')
-        ->tooltip('Enviar email')
-        ->route('students.send.email', ['id' => 'id'])
-        ->target('_self'),
+        //$studentFrequence = Student::get('frequence')->toArray();
 
-        Button::make('destroy', '<i class="fas fa-trash"></i>')
-        ->class('btn btn-outline-danger cursor-pointer m-1 rounded text-sm')
-        ->tooltip('Delete Student')
-        ->route('students.destroy', ['id' => 'id'])
-        ->method('patch')
-        ->target('_self')
+        return [
+            Button::make('sendEmail', '<i class="fa-regular fa-envelope"></i>')
+                ->class('btn btn-outline-warning cursor-pointer m-1 rounded text-sm')
+                ->tooltip('Enviar email')
+                ->route('students.send.email', ['id' => 'id'])
+                ->target('_self'),
+
+            Button::make('edit', '<i class="fas fa-edit"></i>')
+                ->class('btn btn-outline-primary cursor-pointer m-1 rounded text-sm')
+                ->tooltip('Edit Student')
+                ->route('students.edit', ['id' => 'id'])
+                ->target('_self'),
+
+            Button::make('destroy', '<i class="fas fa-trash"></i>')
+                ->class('btn btn-outline-danger cursor-pointer m-1 rounded text-sm')
+                ->tooltip('Delete Student')
+                ->route('students.destroy', ['id' => 'id'])
+                ->method('patch')
+                ->target('_self')
         ];
     }
-
 }

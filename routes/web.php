@@ -23,6 +23,8 @@ Route::get('/', function () {
 
 Route::view("/home", "home")->name("home");
 
+Route::view("/import", "import")->name("import");
+
 Route::prefix('students')->group(function () {
     Route::get('/create', [StudentController::class, 'create'])->name('students.create');
     Route::post('/store', [StudentController::class, 'store'])->name('students.store');
