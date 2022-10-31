@@ -24,7 +24,7 @@
         <br />
         <button type="submit">Importar Planilha</button>
     </form>
-    <a href="/import"> Visualizar Tabela </a>
+    <a href="/sheets"> Visualizar Tabela </a>
 </body>
 
 </html>

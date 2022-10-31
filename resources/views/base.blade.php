@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title> Import </title>
+    <title> base </title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -35,7 +35,7 @@
 
     <div class="container mt-5">
         <div class="rounded shadow p-2 bg-white mt-3 mb-3">
-            @livewire('')
+            @livewire('student-filter-table')
         </div>
         <a href="/"> Voltar </a>
     </div>

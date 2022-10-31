@@ -12,7 +12,7 @@ use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
 
 
-final class StudentTable extends PowerGridComponent
+final class StudentFilterTable extends PowerGridComponent
 {
     use ActionButton;
 
@@ -57,12 +57,12 @@ final class StudentTable extends PowerGridComponent
             ->select('students.*', 'courses.sigla as course')
 
             //condicional da tela dos meses (nesse caso no mês de setembro)
-            //->where('students.created_at', '>', date('2022-09-01'))
-            //->where('students.created_at', '<', date('2022-10-01'));
+            ->where('students.created_at', '>', date('2022-09-01'))
+            ->where('students.created_at', '<', date('2022-10-01'));
 
-            //condicional da tela de import
-            ->where('students.created_at', '>', now('America/Sao_Paulo')->startOfDay())
-            ->where('students.frequence', '<=', '75');
+        //condicional da tela de import
+        //->where('students.created_at', '>', now('America/Sao_Paulo')->startOfDay())
+        //->where('students.frequence', '<=', '75');
     }
 
     /*

@@ -25,13 +25,16 @@ Route::view("/home", "home")->name("home");
 
 Route::view("/import", "import")->name("import");
 
+Route::view("/base", "base")->name("base");
+
+Route::view("/sheets", "students.sheets")->name("sheets");
+
 Route::prefix('students')->group(function () {
     Route::get('/create', [StudentController::class, 'create'])->name('students.create');
     Route::post('/store', [StudentController::class, 'store'])->name('students.store');
     Route::get('{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
     Route::patch('{id}', [StudentController::class, 'destroy'])->name('students.destroy');
     Route::get('{id}/enviar-email', [StudentController::class, 'sendEmail'])->name('students.send.email');
-
 });
 
 // Route::get('envio-email', function () {
@@ -46,4 +49,3 @@ Route::prefix('students')->group(function () {
 
     // return new \App\Mail\newLaravelTips($user);
     //Mail::send(new \App\Mail\newLaravelTips($user));
-
