@@ -10,16 +10,17 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Mail\newLaravelTips;
 use Illuminate\Support\Facades\Mail;
 
-class StudentController extends Controller
-{
+class StudentController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index($id) {
         //vai separar os links por mêses do "created_at"
+
+
+
     }
 
     /**
@@ -27,8 +28,7 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         return view('students.create');
     }
 
@@ -38,8 +38,7 @@ class StudentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         Excel::import(new StudentImport(), $request->file(key: 'import_file'));
 
         return redirect()->route('import')->with('success', 'Arquivo importado com sucesso');
@@ -51,8 +50,7 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         //
     }
 
@@ -62,8 +60,7 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         //
     }
 
@@ -74,8 +71,7 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         //
     }
 
@@ -85,8 +81,7 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         $student = Student::findOrFail($id);
 
         $student->update([
@@ -96,8 +91,7 @@ class StudentController extends Controller
         return back()->with('success', 'Usuário deletado!');
     }
 
-    public function sendEmail($id)
-    {
+    public function sendEmail($id) {
 
         $student = Student::findOrFail($id);
 

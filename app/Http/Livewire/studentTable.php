@@ -12,8 +12,7 @@ use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
 
 
-final class StudentTable extends PowerGridComponent
-{
+final class StudentTable extends PowerGridComponent {
     use ActionButton;
 
     /*
@@ -23,8 +22,7 @@ final class StudentTable extends PowerGridComponent
     | Setup Table's general features
     |
     */
-    public function setUp(): array
-    {
+    public function setUp(): array {
         $this->showCheckBox();
 
         return [
@@ -51,18 +49,17 @@ final class StudentTable extends PowerGridComponent
      *
      * @return Builder<\App\Models\Student>
      */
-    public function datasource(): Builder
-    {
+    public function datasource(): Builder {
         return Student::join('courses', 'students.course_id', '=', 'courses.id')
-            ->select('students.*', 'courses.sigla as course')
+            ->select('students.*', 'courses.sigla as course');
 
-            //condicional da tela dos meses (nesse caso no mês de setembro)
-            //->where('students.created_at', '>', date('2022-09-01'))
-            //->where('students.created_at', '<', date('2022-10-01'));
+        //condicional da tela dos meses (nesse caso no mês de setembro)
+        //->where('students.created_at', '>', date('2022-09-01'))
+        //->where('students.created_at', '<', date('2022-10-01'));
 
-            //condicional da tela de import
-            ->where('students.created_at', '>', now('America/Sao_Paulo')->startOfDay())
-            ->where('students.frequence', '<=', '75');
+        //condicional da tela de import
+        //->where('students.created_at', '>', now('America/Sao_Paulo')->startOfDay())
+        //->where('students.frequence', '<=', '75');
     }
 
     /*
@@ -78,8 +75,7 @@ final class StudentTable extends PowerGridComponent
      *
      * @return array<string, array<int, string>>
      */
-    public function relationSearch(): array
-    {
+    public function relationSearch(): array {
         return [];
     }
 
@@ -94,8 +90,7 @@ final class StudentTable extends PowerGridComponent
     |    the database using the `e()` Laravel Helper function.
     |
     */
-    public function addColumns(): PowerGridEloquent
-    {
+    public function addColumns(): PowerGridEloquent {
         return PowerGrid::eloquent()
             ->addColumn('id')
             ->addColumn('name')
@@ -125,8 +120,7 @@ final class StudentTable extends PowerGridComponent
      *
      * @return array<int, Column>
      */
-    public function columns(): array
-    {
+    public function columns(): array {
         return [
             Column::make('ID', 'id')
                 ->sortable()
@@ -172,8 +166,7 @@ final class StudentTable extends PowerGridComponent
      */
 
 
-    public function actions(): array
-    {
+    public function actions(): array {
 
         return [
             Button::make('sendEmail', '<i class="fa-regular fa-envelope"></i>')
@@ -197,11 +190,10 @@ final class StudentTable extends PowerGridComponent
         ];
     }
 
-    public function actionRules(): array
-    {
+    public function actionRules(): array {
         return [
             Rule::button('sendEmail')
-                ->when(fn ($student) => $student->frequence <= 75)
+                ->when(fn ($student) => $student->frequence >= 75)
                 ->hide()
         ];
     }
