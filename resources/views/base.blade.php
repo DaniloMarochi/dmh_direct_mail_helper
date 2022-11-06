@@ -35,7 +35,7 @@
 
     <div class="container mt-5">
         <div class="rounded shadow p-2 bg-white mt-3 mb-3">
-            @livewire('student-filter-table')
+            <livewire:student-table />
         </div>
         <a href="/"> Voltar </a>
     </div>

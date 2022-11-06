@@ -12,8 +12,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 
-class newLaravelTips extends Mailable
-{
+class newLaravelTips extends Mailable {
     use Queueable, SerializesModels;
 
     private $student;
@@ -23,14 +22,11 @@ class newLaravelTips extends Mailable
      *
      * @return void
      */
-    public function __construct(Student $student)
-    {
-      $this->student = $student;
-
+    public function __construct(Student $student) {
+        $this->student = $student;
     }
 
-    public function build()
-    {
+    public function build() {
         $this->subject('Novo email!');
         $this->to($this->student->email, $this->student->name);
 

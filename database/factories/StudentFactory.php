@@ -4,23 +4,16 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Student>
- */
-class StudentFactory extends Factory
-{
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition()
-    {
+
+class StudentFactory extends Factory {
+
+    public function definition() {
         return [
             "name" => $this->faker->name,
             "email" => $this->faker->email,
-            "frequence" => $this->faker->randomNumber(2)+1,
-            "occurrence" => $this->faker->text
+            "frequence" => $this->faker->randomNumber(2) + 1,
+            "occurrence" => $this->faker->text,
+            "mailed" => 0
         ];
     }
 }

@@ -18,23 +18,21 @@ use Illuminate\Support\Facades\Mail;
 */
 
 Route::get('/', function () {
-    return redirect()->route("home");
+    return redirect()->route('students.index');
 });
 
-Route::view("/home", "home")->name("home");
-
-Route::view("/import", "import")->name("import");
-
-Route::view("/base", "base")->name("base");
-
-Route::view("/sheets", "students.sheets")->name("sheets");
-
 Route::prefix('students')->group(function () {
+    Route::get('/', [StudentController::class, 'index'])->name('students.index');
     Route::get('/create', [StudentController::class, 'create'])->name('students.create');
     Route::post('/store', [StudentController::class, 'store'])->name('students.store');
+    Route::get('/filter', [StudentController::class, 'filter'])->name('students.filter');
+    Route::get('/import', [StudentController::class, 'import'])->name('students.import');
+    Route::get('{month}/{year}/show', [StudentController::class, 'show'])->name('students.show');
     Route::get('{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
-    Route::patch('{id}', [StudentController::class, 'destroy'])->name('students.destroy');
+    Route::patch('{id}/destroy', [StudentController::class, 'destroy'])->name('students.destroy');
+    Route::patch('{id}/restore', [StudentController::class, 'restore'])->name('students.restore');
     Route::get('{id}/enviar-email', [StudentController::class, 'sendEmail'])->name('students.send.email');
+    Route::get('{month}/{year}/mala-direta', [StudentController::class, 'directMail'])->name('students.direct.email');
 });
 
 // Route::get('envio-email', function () {
