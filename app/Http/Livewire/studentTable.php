@@ -15,6 +15,7 @@ use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Heade
 final class StudentTable extends PowerGridComponent {
     use ActionButton;
 
+<<<<<<< HEAD
     public $email;
     public $frequence;
     public $occurrence;
@@ -22,6 +23,15 @@ final class StudentTable extends PowerGridComponent {
     public string $year = '';
     public string $month = '';
 
+=======
+    /*
+    |--------------------------------------------------------------------------
+    |  Features Setup
+    |--------------------------------------------------------------------------
+    | Setup Table's general features
+    |
+    */
+>>>>>>> ded43ed4e5d488e515c847964e4cc167872c9269
     public function setUp(): array {
         $this->showCheckBox();
 
@@ -47,6 +57,7 @@ final class StudentTable extends PowerGridComponent {
                 ->whereBetween('students.created_at', [$start, $end]);
         }
 
+<<<<<<< HEAD
         return Student::join('courses', 'students.course_id', '=', 'courses.id')
             ->select('students.*', 'courses.sigla as course')
             //condicional da tela de import
@@ -59,6 +70,54 @@ final class StudentTable extends PowerGridComponent {
         ];
     }
 
+=======
+    /**
+     * PowerGrid datasource.
+     *
+     * @return Builder<\App\Models\Student>
+     */
+    public function datasource(): Builder {
+        return Student::join('courses', 'students.course_id', '=', 'courses.id')
+            ->select('students.*', 'courses.sigla as course');
+
+        //condicional da tela dos meses (nesse caso no mês de setembro)
+        //->where('students.created_at', '>', date('2022-09-01'))
+        //->where('students.created_at', '<', date('2022-10-01'));
+
+        //condicional da tela de import
+        //->where('students.created_at', '>', now('America/Sao_Paulo')->startOfDay())
+        //->where('students.frequence', '<=', '75');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Relationship Search
+    |--------------------------------------------------------------------------
+    | Configure here relationships to be used by the Search and Table Filters.
+    |
+    */
+
+    /**
+     * Relationship search.
+     *
+     * @return array<string, array<int, string>>
+     */
+    public function relationSearch(): array {
+        return [];
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Add Column
+    |--------------------------------------------------------------------------
+    | Make Datasource fields available to be used as columns.
+    | You can pass a closure to transform/modify the data.
+    |
+    | ❗ IMPORTANT: When using closures, you must escape any value coming from
+    |    the database using the `e()` Laravel Helper function.
+    |
+    */
+>>>>>>> ded43ed4e5d488e515c847964e4cc167872c9269
     public function addColumns(): PowerGridEloquent {
         return PowerGrid::eloquent()
             ->addColumn('id')
@@ -69,6 +128,23 @@ final class StudentTable extends PowerGridComponent {
             ->addColumn('course_formatted', fn (Student $student) => $student->course);
     }
 
+<<<<<<< HEAD
+=======
+    /*
+    |--------------------------------------------------------------------------
+    |  Include Columns
+    |--------------------------------------------------------------------------
+    | Include the columns added columns, making them visible on the Table.
+    | Each column can be configured with properties, filters, actions...
+    |
+    */
+
+    /**
+     * PowerGrid Columns.
+     *
+     * @return array<int, Column>
+     */
+>>>>>>> ded43ed4e5d488e515c847964e4cc167872c9269
     public function columns(): array {
         return [
             Column::make('ID', 'id', 'id')
@@ -141,10 +217,14 @@ final class StudentTable extends PowerGridComponent {
             }
         }
 
+<<<<<<< HEAD
         if ($updated) {
             $this->fillData();
         }
     }
+=======
+    public function actions(): array {
+>>>>>>> ded43ed4e5d488e515c847964e4cc167872c9269
 
     public function actions(): array {
         return [
@@ -173,6 +253,7 @@ final class StudentTable extends PowerGridComponent {
     public function actionRules(): array {
         return [
             Rule::button('sendEmail')
+<<<<<<< HEAD
                 ->when(fn ($student) => ($student->frequence > 75 || $student->mailed || $student->deleted_at))
                 ->hide(),
 
@@ -182,6 +263,9 @@ final class StudentTable extends PowerGridComponent {
 
             Rule::button('restoreStudent')
                 ->when(fn ($student) => $student->deleted_at == null)
+=======
+                ->when(fn ($student) => $student->frequence >= 75)
+>>>>>>> ded43ed4e5d488e515c847964e4cc167872c9269
                 ->hide()
         ];
     }
