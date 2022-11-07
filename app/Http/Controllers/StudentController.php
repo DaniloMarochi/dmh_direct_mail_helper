@@ -11,7 +11,6 @@ use Carbon\Carbon;
 use Exception;
 
 class StudentController extends Controller {
-<<<<<<< HEAD
 
     public function index() {
         return view('students.index');
@@ -69,78 +68,6 @@ class StudentController extends Controller {
         return view('students.show', compact('year', 'month', 'month_formatted', 'disable_direct_mail_button'));
     }
 
-=======
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index($id) {
-        //vai separar os links por mêses do "created_at"
-
-
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create() {
-        return view('students.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request) {
-        Excel::import(new StudentImport(), $request->file(key: 'import_file'));
-
-        return redirect()->route('import')->with('success', 'Arquivo importado com sucesso');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id) {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id) {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id) {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
->>>>>>> ded43ed4e5d488e515c847964e4cc167872c9269
     public function destroy($id) {
         $student = Student::findOrFail($id);
 
@@ -155,12 +82,8 @@ class StudentController extends Controller {
         return redirect()->route('students.show', ['month' => $month, 'year' => $year])->with('success', 'Usuário deletado!');
     }
 
-<<<<<<< HEAD
     public function restore($id) {
         $student = Student::where('id', $id)->withTrashed()->restore();
-=======
-    public function sendEmail($id) {
->>>>>>> ded43ed4e5d488e515c847964e4cc167872c9269
 
         if ($student) {
             $aux_student = Student::findOrFail($id);

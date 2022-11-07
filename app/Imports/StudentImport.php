@@ -41,8 +41,7 @@ class StudentImport implements ToModel, WithHeadingRow, WithMultipleSheets {
 
         // }
         $course = Course::where('slug', $this->slug($row['curso']))->first();
-        //dd($this->slug($row['curso']));
-        //dd($course->id);
+
         if ($course) {
             if (isset($row[2])) {
                 return null;
