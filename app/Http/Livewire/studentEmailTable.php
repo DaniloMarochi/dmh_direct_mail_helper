@@ -2,25 +2,23 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Course;
 use App\Models\Student;
+use App\Models\Course;
 use Illuminate\Support\Carbon;
-use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\Builder;
-use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
+use Illuminate\Database\QueryException;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
+use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
 
-
-final class StudentTable extends PowerGridComponent {
+final class studentEmailTable extends PowerGridComponent
+{
     use ActionButton;
 
-    public $email;
     public $frequence;
     public $occurrence;
 
-    public string $year = '';
-    public string $month = '';
+    public string $email = '';
 
     public function setUp(): array {
         $this->showCheckBox();
@@ -32,25 +30,44 @@ final class StudentTable extends PowerGridComponent {
         ];
     }
 
-    public function datasource(): Builder {
-        if ($this->year != '' && $this->month != '') {
-            Carbon::setLocale('pt_BR');
+    /*
+    |--------------------------------------------------------------------------
+    |  Datasource
+    |--------------------------------------------------------------------------
+    | Provides data to your Table using a Model or Collection
+    |
+    */
 
-            $date = Carbon::createFromDate($this->year, $this->month, 1, 'America/Sao_Paulo');
-
-            $start = $date->startOfMonth()->toDateTimeString();
-            $end = $date->endOfMonth()->toDateTimeString();
-
+    /**
+    * PowerGrid datasource.
+    *
+    * @return Builder<\App\Models\Student>
+    */
+    public function datasource(): Builder
+    {
+        if($this->email != null && $this->email != ''){
             return Student::join('courses', 'students.course_id', '=', 'courses.id')
-                ->select('students.*', 'courses.sigla as course')
-                ->whereBetween('students.created_at', [$start, $end]);
+            ->select('students.*', 'courses.sigla as course')
+            ->where('students.email', $this->email);
+
         }
 
-        return Student::join('courses', 'students.course_id', '=', 'courses.id')
-            ->select('students.*', 'courses.sigla as course')
-            ->where('students.created_at', '>', now('America/Sao_Paulo')->startOfDay());
+        return redirect()->route('students.index')->with('error', 'Nenhum e-mail foi providenciado');
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    |  Relationship Search
+    |--------------------------------------------------------------------------
+    | Configure here relationships to be used by the Search and Table Filters.
+    |
+    */
+
+    /**
+     * Relationship search.
+     *
+     * @return array<string, array<int, string>>
+     */
     public function relationSearch(): array {
         return [
             'course'
@@ -59,7 +76,7 @@ final class StudentTable extends PowerGridComponent {
 
     public function addColumns(): PowerGridEloquent {
         return PowerGrid::eloquent()
-            ->addColumn('id')
+            ->addColumn('created_at_formatted', fn (Student $student) => Carbon::parse($student->created_at)->format('m/Y'))
             ->addColumn('name')
             ->addColumn('email')
             ->addColumn('frequence')
@@ -69,9 +86,9 @@ final class StudentTable extends PowerGridComponent {
 
     public function columns(): array {
         return [
-            Column::make('ID', 'id', 'id')
+            Column::make('Criado em', 'created_at_formatted', 'created_at')
                 ->sortable()
-                ->field('id')
+                ->field('created_at_formatted', 'created_at')
                 ->makeInputRange(),
 
             Column::make('Nome', 'name', 'name')
@@ -141,51 +158,5 @@ final class StudentTable extends PowerGridComponent {
         if ($updated) {
             $this->fillData();
         }
-    }
-
-    public function actions(): array {
-        return [
-            Button::make('sendEmail', '<i class="fa-regular fa-envelope"></i>')
-                ->class('btn btn-outline-warning cursor-pointer m-1 rounded text-sm')
-                ->tooltip('Enviar email')
-                ->route('students.send.email', ['id' => 'id'])
-                ->target('_self'),
-
-            Button::make('destroy', '<i class="fas fa-trash"></i>')
-                ->class('btn btn-outline-danger cursor-pointer m-1 rounded text-sm')
-                ->tooltip('Deletar Estudante')
-                ->route('students.destroy', ['id' => 'id'])
-                ->method('patch')
-                ->target('_self'),
-
-            Button::make('restoreStudent', '<i class="fa-solid fa-trash-arrow-up"></i>')
-                ->class('btn btn-outline-warning cursor-pointer m-1 rounded text-sm')
-                ->tooltip('Restaurar Estudante')
-                ->route('students.restore', ['id' => 'id'])
-                ->method('patch')
-                ->target('_self'),
-
-            Button::make('studentHistoric', '<i class="fa fa-book"></i>')
-                ->class('btn btn-outline-warning cursor-pointer m-1 rounded text-sm')
-                ->tooltip('Mostrar Histórico')
-                ->route('students.historic', ['email' => 'email'])
-                ->target('_self'),
-        ];
-    }
-
-    public function actionRules(): array {
-        return [
-            Rule::button('sendEmail')
-                ->when(fn ($student) => ($student->frequence > 75 || $student->mailed || $student->deleted_at))
-                ->hide(),
-
-            Rule::button('destroy')
-                ->when(fn ($student) => $student->deleted_at != null)
-                ->hide(),
-
-            Rule::button('restoreStudent')
-                ->when(fn ($student) => $student->deleted_at == null)
-                ->hide()
-        ];
     }
 }

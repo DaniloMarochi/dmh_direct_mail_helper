@@ -7,14 +7,13 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class CourseSeeder extends Seeder {
-<<<<<<< HEAD
-=======
+
     /**
      * Run the database seeds.
      *
      * @return void
      */
->>>>>>> ded43ed4e5d488e515c847964e4cc167872c9269
+
     public function run() {
         Course::create([
             "name" => "Tecnologia em análise e desenvolvimento de sistemas",

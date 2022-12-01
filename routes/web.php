@@ -32,6 +32,7 @@ Route::prefix('students')->group(function () {
     Route::patch('{id}/destroy', [StudentController::class, 'destroy'])->name('students.destroy');
     Route::patch('{id}/restore', [StudentController::class, 'restore'])->name('students.restore');
     Route::get('{id}/enviar-email', [StudentController::class, 'sendEmail'])->name('students.send.email');
+    Route::get('{email}/historico', [StudentController::class, 'historic'])->name('students.historic');
     Route::get('{month}/{year}/mala-direta', [StudentController::class, 'directMail'])->name('students.direct.email');
 });
 

@@ -14,7 +14,7 @@
                             </button>
                         </form>
                         &nbsp;
-                        <a href="{{ route('students.index') }}" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="Voltar para página anterior">Voltar</a>
+                        <a href="{{ route('students.filter') }}" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="Voltar para página anterior">Voltar</a>
                     </div>
                 </div>
 

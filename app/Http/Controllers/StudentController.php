@@ -150,4 +150,16 @@ class StudentController extends Controller {
             return back()->with('error', 'Mala direta não foi enviada!');
         }
     }
+
+    public function historic($email){
+        //pelo id do estudante que eu acabei de clicar no ícone, quero trazer na tabela todas
+        // as vezes que o email daquele estudante é repetido no banco de dados
+        try {
+            $media = Student::where('email', $email)->avg('frequence');
+
+            return view('students.historic', compact('email', 'media'));
+        } catch (Exception $ex) {
+            return back()->with('error', 'Estudante não encontrado');
+        }
+    }
 }
